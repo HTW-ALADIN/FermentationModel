@@ -10,13 +10,12 @@ TLabel = TypeVar("TLabel") # corresponds to unknown
 
 # Stub for ChartDataset<TType, TData>
 class ChartDataset(Generic[TType, TData]):
-    # The real class could include many Chart.js fields.
-    # This is just a placeholder to satisfy typing.
     pass
 
 
 class ChartJSAdapter(OutputAdapter):
-    def transform_data(self, df: pd.DataFrame) -> str:
+    def transform_data(self, df: pd.DataFrame) -> ChartDataset:
+        # TODO: transform the df into the appropriate diagrams (e.g. see example-data below)
         diagramData = {
             "type": 'bar',
             "diagram1": {
@@ -30,6 +29,7 @@ class ChartJSAdapter(OutputAdapter):
                 "labels": ['a', 'b']
             },
             "diagram2": {
+                "type": 'bar',
                 "datasets": [{
                     "label": "cₓ",
                     "data": [20, 10],
@@ -40,6 +40,7 @@ class ChartJSAdapter(OutputAdapter):
                 "labels": ['a', 'b']
             },
             "diagram3": {
+                "type": 'bar',
                 "datasets": [{
                     "label": "cₓ",
                     "data": [20, 10],
@@ -50,6 +51,7 @@ class ChartJSAdapter(OutputAdapter):
                 "labels": ['a', 'b']
             },
             "diagram4": {
+                "type": 'bar',
                 "datasets": [{
                     "label": "cₓ",
                     "data": [20, 10],
