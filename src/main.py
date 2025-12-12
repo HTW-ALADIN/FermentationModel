@@ -1,9 +1,9 @@
 import sys
 import json
 import pandas as pd
-import numpy as np #numerical tools
+#import numpy as np #numerical tools
 from Fx_ODE_Bioreaktor import Bioreaktor_ODE #hier wird das Differentialgleichungssystem definiert
-from scipy.integrate import solve_ivp #solve odes
+#from scipy.integrate import solve_ivp #solve odes
 from Nebenrechnungen import Nebenrechnungen
 from calc_bioreactor import calculate
 from Util.base_io_adapter import IOAdapter
@@ -24,7 +24,7 @@ def main() -> Tuple[pd.DataFrame, IOAdapter]:
 
     arg = json.loads(sys.argv[1])
     input_df = input_adapter.transform_data(arg)
-    print(input_df)
+    #print(input_df)
     """
     TODO: Selection logic (cli-parameters) to select OutputAdapter if required.
     Default is ChartJSAdapter

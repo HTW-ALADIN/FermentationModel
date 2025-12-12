@@ -7,7 +7,7 @@ class InputKeys(str, Enum):
     bolus_c = "Bolus_C",
     feed_c = "Feed_C",
     bolus_n = "Bolus_N",
-    feed_n = "Feed N"
+    feed_n = "Feed N",
     rpm = "Drehzahl",
     pressure = "Druck",
     duration = "Dauer",
@@ -17,5 +17,5 @@ class InputKeys(str, Enum):
     do = "DO",
     density = "Dichte",
     c_x0 = "c_x0",
-    q_in = "Q_in" 
-    q_out = "Q_Out",
+    q_in = "Q_in", 
+    q_out = "Q_Out"
