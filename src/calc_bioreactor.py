@@ -83,23 +83,53 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             #print("dim y_ges", y_ges.shape)
             t_ges=np.atleast_2d(result.t).T
             #print("dim t_ges", t_ges.shape)
-            # sum_feeding = t_span*Fpar["Feed_C"][0]
-            # len_t_span=len(t_span)
-            # Drehzahl = np.zeros(len_t_span)+Fpar["Drehzahl"][0]
-            # Begasungsrate = np.zeros(len_t_span)+Fpar["Q_Air"][0]
-            # Druck = np.zeros(len_t_span)+Fpar["Druck"][0]
+            sum_feeding = t_span*row[InputKeys.feed_c]
+            len_t_span=len(t_span)
+            Drehzahl = np.zeros(len_t_span)+row[InputKeys.rpm]
+            Begasungsrate = np.zeros(len_t_span)+row[InputKeys.q_air]
+            Druck = np.zeros(len_t_span)+row[InputKeys.pressure]
         else:
             y=result.y.T #transform array
             y_ges=np.vstack((y_ges, y))
             t=np.atleast_2d(result.t).T
             t_ges=np.vstack((t_ges, t))
-            # already_fed=sum_feeding[-1]
-            # t_span_temp=np.subtract(t_span,t_span[0])
-            # temp_feed=already_fed+t_span_temp*Fpar["Feed_C"][i-1]
-            # sum_feeding = np.hstack((sum_feeding, temp_feed))
-            # len_t_span=len(t_span)
-            # Drehzahl = np.hstack((Drehzahl, np.zeros(len_t_span)+Fpar["Drehzahl"][i-1]))
-            # Begasungsrate = np.hstack((Begasungsrate, np.zeros(len_t_span)+Fpar["Q_Air"][i-1]))
-            # Druck = np.hstack((Druck,np.zeros(len_t_span)+Fpar["Druck"][i-1]))
-    result_df=pd.DataFrame([0,0])
+            already_fed=sum_feeding[-1]
+            t_span_temp=np.subtract(t_span,t_span[0])
+            temp_feed=already_fed+t_span_temp*row[InputKeys.feed_c]
+            sum_feeding = np.hstack((sum_feeding, temp_feed))
+            len_t_span=len(t_span)
+            Drehzahl = np.hstack((Drehzahl, np.zeros(len_t_span)+row[InputKeys.rpm]))
+            Begasungsrate = np.hstack((Begasungsrate, np.zeros(len_t_span)+row[InputKeys.q_air]))
+            Druck = np.hstack((Druck,np.zeros(len_t_span)+row[InputKeys.pressure]))
+
+    #######################################
+    # #Weitere Variablen berechnen
+    #######################################
+    c_ox_sat_DO=ferm_param_df[InputKeys.c_o2_sat][0] #Sauerstofflöslichkeit zu Beginn der Fermentation um DO zu berechnen
+    c_inert_Luft=1-c_O2_Luft-c_CO2_Luft #Inertgasanteil der Luft
+    c_inert_Abgas=np.zeros(len(t_ges))+1 
+    c_inert_Abgas=c_inert_Abgas-y_ges[:,5]
+    c_inert_Abgas=c_inert_Abgas-y_ges[:,6]
+    delta_O2=np.zeros(len(t_ges))+c_O2_Luft
+    delta_O2=delta_O2-y_ges[:,5]*c_inert_Luft/c_inert_Abgas
+    OUR=Begasungsrate*60/Vm_norm*delta_O2+1*10**(-10) #%Oxygen Uptake Rate in mol*L-1*h-1, last addition to avoid div by zero
+    OUR=OUR*1000 # Umrechnung in mmol
+
+    delta_CO2=np.zeros(len(t_ges))-c_CO2_Luft
+    delta_CO2=delta_CO2+y_ges[:,6]*c_inert_Luft/c_inert_Abgas
+    CER=Begasungsrate*60/Vm_norm*delta_CO2 #Carbon Dioxide Evolution Rate in mol*L-1*h-1
+    CER=CER*1000 # Umrechnung in mmol
+    RQ=CER/OUR
+    c_DO_proz=y_ges[:,4]/c_ox_sat_DO*100
+    V_L=np.zeros(len(t_ges))+ferm_param_df[InputKeys.start_vol][0]*1000 #Platzhalter für Fermentationsvolumen
+    #put results of solve_ivp into a dataframe
+    print("calculation_finished")
+    #stack 1D Arrays together
+    calc=np.column_stack((sum_feeding,Begasungsrate,Drehzahl,Druck,OUR,CER,RQ,c_DO_proz,V_L))
+    #print(calc.shape)
+    results_columns=["t","c_x","c_S1","c_S2","c_P","c_DO","c_O2_Out","c_CO2_Out","Sum_Feed","Begasungsrate","Drehzahl","Druck","OUR","CER","RQ","c_DO_proz","V_L"]
+    results=np.hstack((np.array(np.atleast_2d(t_ges)),np.array(y_ges),calc)) #atleast_2d makes sure that the array has a 2nd dimension
+
+    result_df=pd.DataFrame(data=results, columns=results_columns)
+    
     return result_df

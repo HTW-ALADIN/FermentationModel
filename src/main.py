@@ -10,6 +10,7 @@ from Fx_ODE_Bioreaktor import (
 # from scipy.integrate import solve_ivp #solve odes
 from Nebenrechnungen import Nebenrechnungen
 from calc_bioreactor import calculate
+from multiplot_ferm import multiplot_ferm
 from Util.base_io_adapter import IOAdapter
 from OutputAdapter.chart_js_adapter import ChartJSAdapter
 from InputAdapter.file_input_adapter import FileInputAdapter
@@ -46,4 +47,5 @@ if __name__ == "__main__":
     output = output_adapter.transform_data(result_df)
 
     sys.stdout.write(json.dumps(output))
+    multiplot_ferm(result_df)    
     sys.exit(0)
