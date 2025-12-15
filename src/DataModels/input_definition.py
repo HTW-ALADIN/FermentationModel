@@ -18,4 +18,5 @@ class InputKeys(str, Enum):
     density = "Dichte",
     c_x0 = "c_x0",
     q_in = "Q_in", 
-    q_out = "Q_Out"
+    q_out = "Q_Out",
+    c_o2_sat ="c_O2_sat"

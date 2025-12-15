@@ -29,7 +29,7 @@ def main() -> Tuple[pd.DataFrame, IOAdapter]:
 
     arg = sys.argv[1]
     input_df = input_adapter.transform_data(arg)
-
+    print(input_df)
     """
     TODO: Selection logic (cli-parameters) to select OutputAdapter if required.
     Default is ChartJSAdapter
