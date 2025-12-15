@@ -1,8 +1,9 @@
 import pandas as pd
 import json
-from .DataModels.input_definition import InputKeys
+from DataModels.input_definition import InputKeys
 
-MODEL_PATH = "./src/Model/models.json"
+MODEL_PATH = "./src/DataModels/models.json"
+
 
 def calculate(df: pd.DataFrame) -> pd.DataFrame:
     try:
@@ -10,7 +11,7 @@ def calculate(df: pd.DataFrame) -> pd.DataFrame:
         with open(MODEL_PATH) as f:
             model = json.load(f)
             model = model[model_name]
-        
+
     except json.JSONDecodeError:
         print("Invalid JSON input.")
         pass

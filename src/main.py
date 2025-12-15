@@ -7,6 +7,7 @@ from OutputAdapter.chart_js_adapter import ChartJSAdapter
 from InputAdapter.std_in_adapter import STDINAdapter
 from typing import Tuple
 
+
 def main() -> Tuple[pd.DataFrame, IOAdapter]:
     """
     TODO: Add selection logic (cli-parameters) to select InputAdapter if required.
@@ -15,10 +16,10 @@ def main() -> Tuple[pd.DataFrame, IOAdapter]:
     input_adapter = STDINAdapter()
 
     if len(sys.argv) < 2:
-        print("Usage: python script.py '{\"key\": \"value\"}'")
+        print('Usage: python script.py \'{"key": "value"}\'')
         sys.exit(1)
 
-    arg = json.loads(sys.argv[1])
+    arg = sys.argv[1]
     input_df = input_adapter.transform_data(arg)
 
     """

@@ -3,10 +3,11 @@ import sys
 import pandas as pd
 import json
 
+
 class STDINAdapter(InputAdapter):
     def transform_data(self, data: str) -> pd.DataFrame:
         try:
-            input_df = pd.DataFrame(data)
+            input_df = pd.DataFrame(json.loads(data))
         except json.JSONDecodeError as error:
             print("Invalid JSON input.")
             print(error)
