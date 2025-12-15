@@ -1,10 +1,18 @@
 import sys
 import json
 import pandas as pd
-from calculation import calculate
+
+# import numpy as np #numerical tools
+from Fx_ODE_Bioreaktor import (
+    Bioreaktor_ODE,
+)  # hier wird das Differentialgleichungssystem definiert
+
+# from scipy.integrate import solve_ivp #solve odes
+from Nebenrechnungen import Nebenrechnungen
+from calc_bioreactor import calculate
 from Util.base_io_adapter import IOAdapter
 from OutputAdapter.chart_js_adapter import ChartJSAdapter
-from InputAdapter.std_in_adapter import STDINAdapter
+from InputAdapter.file_input_adapter import FileInputAdapter
 from typing import Tuple
 
 
@@ -13,7 +21,7 @@ def main() -> Tuple[pd.DataFrame, IOAdapter]:
     TODO: Add selection logic (cli-parameters) to select InputAdapter if required.
     Default is STDINAdapter
     """
-    input_adapter = STDINAdapter()
+    input_adapter = FileInputAdapter()
 
     if len(sys.argv) < 2:
         print('Usage: python script.py \'{"key": "value"}\'')
