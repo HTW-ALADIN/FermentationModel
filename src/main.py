@@ -47,5 +47,5 @@ if __name__ == "__main__":
     output = output_adapter.transform_data(result_df)
 
     sys.stdout.write(json.dumps(output))
-    multiplot_ferm(result_df)    
+    #multiplot_ferm(result_df)    
     sys.exit(0)
