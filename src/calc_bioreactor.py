@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-from .DataModels.input_definition import InputKeys
+from DataModels.input_definition import InputKeys
 
 MODEL_PATH = "./src/Model/model_db.json"
 
