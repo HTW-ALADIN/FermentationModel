@@ -2,13 +2,6 @@ import sys
 import json
 import pandas as pd
 
-# import numpy as np #numerical tools
-from Fx_ODE_Bioreaktor import (
-    Bioreaktor_ODE,
-)  # hier wird das Differentialgleichungssystem definiert
-
-# from scipy.integrate import solve_ivp #solve odes
-from Nebenrechnungen import Nebenrechnungen
 from calc_bioreactor import calculate
 from multiplot_ferm import multiplot_ferm
 from Util.base_io_adapter import IOAdapter
@@ -47,5 +40,5 @@ if __name__ == "__main__":
     output = output_adapter.transform_data(result_df)
 
     sys.stdout.write(json.dumps(output))
-    #multiplot_ferm(result_df)    
+    multiplot_ferm(result_df)    
     sys.exit(0)

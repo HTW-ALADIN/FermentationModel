@@ -17,7 +17,7 @@ class ChartJSAdapter(OutputAdapter):
     def transform_data(self, df: pd.DataFrame) -> ChartDataset:
         # TODO: transform the df into the appropriate diagrams (e.g. see example-data below)
         diagramData = {
-            "type": 'bar',
+            "type": 'line',
             "diagram1": {
                 "datasets": [{
                     "label": "cₓ",
@@ -29,7 +29,7 @@ class ChartJSAdapter(OutputAdapter):
                 "labels": ['a', 'b']
             },
             "diagram2": {
-                "type": 'bar',
+                "type": 'line',
                 "datasets": [{
                     "label": "cₓ",
                     "data": [20, 10],

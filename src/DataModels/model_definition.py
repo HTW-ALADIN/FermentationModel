@@ -15,6 +15,12 @@ class ModelKeys(str, Enum):
     YPS1 = "YPS1",
     RQ_x = "RQ_x",
     Y_CO2_P = "Y_CO2_P",
+    pH_min = "pH_min"	
+    pH_opt = "pH_opt"	
+    pH_max = "pH_max"	
+    T_min =	"T_min"
+    T_opt =	"T_opt"
+    T_max = "T_max"
     substrate_1 = "Substrat 1",
     substrate_2 = "Substrat 2",
     product = "Produkt",
