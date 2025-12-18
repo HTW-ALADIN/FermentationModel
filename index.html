@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Chart Test</title>
+    <script    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <style>
+        .grid-container{
+            display:grid;
+            grid-template-columns:auto auto;
+            padding: 30px;
+        }    
+    </style>
+</head>
+
+<body>
+    <div class="grid-container">
+        <div> <!--style="border: 1px solid black;">-->
+            <canvas id="Chart_1" style="padding-bottom: 30px; max-width:700px; max-height:400px"></canvas>
+        </div>
+        <div>
+            <canvas id="Chart_2" style="padding-bottom: 30px; max-width:700px; max-height:400px"></canvas>
+        </div>
+        <div> <!--style="border: 1px solid black;">-->
+            <canvas id="Chart_3" style="padding-bottom: 30px; max-width:700px; max-height:400px"></canvas>
+        </div>
+        <div>
+            <canvas id="Chart_4" style="padding-bottom: 30px; max-width:700px; max-height:400px"></canvas>
+        </div>
+    </div>
+   
+    <script>
+   // Fetch the JSON file and read its contents into variable alpha
+
+    fetch('output.json')
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+            }       
+            return response.json();
+        })
+        .then(json => {
+            
+            const hochminus1="\u{207B}\u{00B9}";
+            const cdot="\u{00B7}";
+            const labelfontsize=18;
+            const oliv="#A0C382";
+            const petrol="#5F9B8C";
+            const sungelb="#FAC846";
+            const orange="#FF7D2D";
+            const dblau="#233C4B";
+
+            new Chart("Chart_1", {
+                    type: "line",
+                    data: {
+                        labels: json.t,
+                        datasets: [
+                            {
+                                label: "Substrat 1 (S1)",// alternative with subscripts "c\u{209B}\u{2081}",
+                                yAxisID: "yL",
+                                fill:false, //fill area under curve?
+                                lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                                pointRadius: 0, //make line graph without points set to zero
+                                //pointBackgroundColor: "rgb(0,0,255)",
+                                backgroundColor: orange , //"rgba(0,0,255,1.0)", color to fill area under curve
+                                borderColor: orange, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                                data: json.c_S1
+                            },
+                            {
+                                label: "Summe Feeding S1",// alternative with subscripts "c\u{209B}\u{2081}",
+                                yAxisID: "yL",
+                                fill:false, //fill area under curve?
+                                lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                                pointRadius: 0, //make line graph without points set to zero
+                                //pointBackgroundColor: "rgb(0,0,255)",
+                                backgroundColor: sungelb , //"rgba(0,0,255,1.0)", color to fill area under curve
+                                borderColor: sungelb, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                                data: json.Sum_Feed
+                            },
+                            {
+                                label: "Substrat 2 (S2)",
+                                yAxisID: "yR",
+                                fill:false, //fill area under curve?
+                                lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                                pointRadius: 0, //make line graph without points set to zero
+                                //pointBackgroundColor: "rgb(0,0,255)",
+                                backgroundColor: petrol, //"rgba(0,0,255,1.0)", color to fill area under curve
+                                borderColor: petrol, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                                data: json.c_S2
+                            }
+
+                    ]
+                },
+                options: {
+                    legend: {display: true},
+                    scales: {
+                
+                            x: {type:"linear",
+                                title: {display: true, text:"t in h", font: {size:labelfontsize}},
+                                ticks: {min:0, stepSize: 1}
+                            },
+                            yL:{
+                                position:"left",
+                                type: "linear",
+                                display: true,
+                                grid: {drawOnChartArea: true},
+                                min: 0,
+                                title: {display: true, text:"c(S1) [g"+cdot+"L"+hochminus1+"]", font: {size:labelfontsize}},
+                                //ticks: {color: "green"}
+                            },
+                            yR:{
+                                position:"right",
+                                type: "linear",
+                                display: true,
+                                grid: {drawOnChartArea: false},
+                                type: "linear",
+                                min: 0,
+                                title: {display: true, text:"c(S2) [g"+cdot+"L"+hochminus1+"]", font: {size:labelfontsize}, color:petrol},
+                                ticks: {color: petrol}
+                            },
+                    },
+                    plugins:{legend: {position:"bottom"},
+                            title: {display: true, text:"Substratkonzentration",font: {size:labelfontsize+2}}       
+                    }
+                }
+            });
+
+            new Chart("Chart_2", {
+                type: "line",
+                data: {
+                    labels: json.t,
+                    datasets: [
+                        {
+                            label: "Druck (p)",// alternative with subscripts "c\u{209B}\u{2081}",
+                            yAxisID: "yL",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            //pointBackgroundColor: "rgb(0,0,255)",
+                            backgroundColor: orange , //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: orange, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.Druck
+                        },
+                        {
+                            label: "Begasungsrate Luft (Q_Air)",// alternative with subscripts "c\u{209B}\u{2081}",
+                            yAxisID: "yL",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            //pointBackgroundColor: "rgb(0,0,255)",
+                            backgroundColor: sungelb , //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: sungelb, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.Q_Air
+                        },
+                        {
+                            label: "Drehzahl (n)",
+                            yAxisID: "yR",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            //pointBackgroundColor: "rgb(0,0,255)",
+                            backgroundColor: "black", //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: "black", // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.Drehzahl
+                        },
+                        {
+                            label: "Gel\u{00F6}stsauerstoff (DO)",
+                            yAxisID: "yR",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            //pointBackgroundColor: "rgb(0,0,255)",
+                            backgroundColor: oliv, //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: oliv, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.c_DO
+                        }
+
+                ]
+            },
+            options: {
+                legend: {display: true},
+                scales: {
+            
+                        x: {type:"linear",
+                                title: {display: true, text:"t in h", font: {size:labelfontsize}},
+                                ticks: {min:0, stepSize: 1}
+                            },
+                        yL:{
+                            position:"left",
+                            type: "linear",
+                            display: true,
+                            grid: {drawOnChartArea: true},
+                            min: 0,
+                            title: {display: true, text:"p [barg], Q_Air [NL"+cdot+"L"+hochminus1+cdot+"min"+hochminus1+"]", font: {size:labelfontsize}},
+                        },
+                        yR:{
+                            position:"right",
+                            type: "linear",
+                            display: true,
+                            grid: {drawOnChartArea: false},
+                            type: "linear",
+                            min: 0,
+                            title: {display: true, text:"n/10[min"+hochminus1+"], DO [%]", font: {size:labelfontsize}, color:"black"},
+                            ticks: {color: "black"}
+                        },
+                },
+                plugins:{legend: {position:"bottom"},
+                        title: {display: true, text:"Begasungsbezogen",font: {size:labelfontsize+2}}       
+                }
+            }
+        });
+
+            new Chart("Chart_3", {
+                type: "line",
+                data: {
+                    labels: json.t,
+                    datasets: [
+                        {
+                            label: "Biotrockenmasse c(x)",// alternative with subscripts "c\u{209B}\u{2081}",
+                            yAxisID: "yL",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            //pointBackgroundColor: "rgb(0,0,255)",
+                            backgroundColor: orange , //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: orange, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.c_x
+                        },
+                        {
+                            label: "Produktkonz. c(p)",// alternative with subscripts "c\u{209B}\u{2081}",
+                            yAxisID: "yL",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            //pointBackgroundColor: "rgb(0,0,255)",
+                            backgroundColor: sungelb , //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: sungelb, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.c_P
+                        },
+                        {
+                            label: "Volumen (V)",
+                            yAxisID: "yR",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            //pointBackgroundColor: "rgb(0,0,255)",
+                            backgroundColor: petrol, //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: petrol, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.V
+                        }
+
+                ]
+            },
+            options: {
+                legend: {display: true},
+                scales: {
+            
+                        x: {type:"linear",
+                                title: {display: true, text:"t in h", font: {size:labelfontsize}},
+                                ticks: {min:0, stepSize: 1}
+                            },
+                        yL:{
+                            position:"left",
+                            type: "linear",
+                            display: true,
+                            grid: {drawOnChartArea: true},
+                            min: 0,
+                            title: {display: true, text:"c(P), c(X) [g"+cdot+"L"+hochminus1+"]", font: {size:labelfontsize}},
+                            //ticks: {color: "green"}
+                        },
+                        yR:{
+                            position:"right",
+                            type: "linear",
+                            display: true,
+                            grid: {drawOnChartArea: false},
+                            type: "linear",
+                            min: 0,
+                            title: {display: true, text:"V [L]", font: {size:labelfontsize}, color:"black"},
+                            ticks: {color: "black"}
+                        },
+                },
+                plugins:{legend: {position:"bottom"},
+                        title: {display: true, text:"Produkte und Volumen",font: {size:labelfontsize+2}}       
+                }
+            }
+        });
+
+            new Chart("Chart_4", {
+                type: "line",
+                data: {
+                    labels: json.t,
+                    datasets: [
+                        {
+                            label: "Oxygen uptake rate (OUR)",// alternative with subscripts "c\u{209B}\u{2081}",
+                            yAxisID: "yL",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            //pointBackgroundColor: "rgb(0,0,255)",
+                            backgroundColor: "brown" , //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: "brown", // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.OUR
+                        },
+                
+                        {
+                            label: "Respiratorischer Quotient (RQ)",
+                            yAxisID: "yR",
+                            fill:false, //fill area under curve?
+                            lineTension:0.2,  //linienspannung - grad wie stark die Linie durch Splines interpoliert werden soll
+                            pointRadius: 0, //make line graph without points set to zero
+                            backgroundColor: petrol, //"rgba(0,0,255,1.0)", color to fill area under curve
+                            borderColor: petrol, // last 2 digits are for transparency Alt: rgba(120,12,255,0.8)",
+                            data: json.RQ
+                        }
+
+                ]
+            },
+            options: {
+                legend: {display: true},
+                scales: {
+            
+                         x: {type:"linear",
+                                title: {display: true, text:"t in h", font: {size:labelfontsize}},
+                                ticks: {min:0, stepSize: 1}
+                            },
+                        yL:{
+                            position:"left",
+                            type: "linear",
+                            display: true,
+                            grid: {drawOnChartArea: true},
+                            min: 0,
+                            title: {display: true, text:"OUR [mmol"+cdot+"L"+hochminus1+cdot+"h"+hochminus1+"]", font: {size:labelfontsize}},
+                        },
+                        yR:{
+                            position:"right",
+                            type: "linear",
+                            display: true,
+                            grid: {drawOnChartArea: false},
+                            type: "linear",
+                            min: 0,
+                            title: {display: true, text:"RQ [-]", font: {size:labelfontsize}, color:petrol},
+                            ticks: {color: petrol}
+                        },
+                },
+                plugins:{legend: {position:"bottom"},
+                        title: {display: true, text:"Abgasanalyse",font: {size:labelfontsize+2}}       
+                }
+            }
+        });
+
+
+
+        })
+            .catch(error => {
+            console.error('Error fetching data.json:', error);
+        });
+  
+        // const time=Daten.time;
+        // const c_S1=Daten.c_S1;
+        // const time=[50,60,70,80,90,100,110,120,130,140,150];
+        // const c_S2=[7,8,8,9,9,9,10,11,14,14,15];
+        // const c_S1=[17,18,18,19,19,19,110,111,114,114,115];
+        // const Feed_S1=[1,2,3,4,5,10,20,30,40,50,60,70];
+        // const RQ=[1,1,1,1.1,1,1.1,1.1,1.1,1,1,1,1,1,1];
+        // const OUR=[17,18,18,19,19,19,110,111,114,114,115];
+        // const rpm=[100,100,100,100,100,100,100,120,120,120,120];
+        // const druck=[0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.4,0.4,0.4,0.4,0.4];
+        // const Q_Air=[0.8,0.8,0.8,0.8,0.8,0.8,1.0,1.0,1.0,1.0,1.0];
+        // const DO=[100,100,90,80,70,60,40,30,20,10,8];
+        // const V=[100,100,100,100,100,100,100,100,100,100,100];
+        // const c_X=[0,0.1,0.2,0.4,0.8,1.6,3.2,4.8,5,5];
+        // const c_P=[0,0,0.1,0.1,0.1,0.1,0.12,0.12,0.12,0.18,0.18];
+
+        
+    </script>
+
+</body>
+</html>
