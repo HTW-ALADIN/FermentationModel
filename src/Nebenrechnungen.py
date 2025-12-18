@@ -10,7 +10,7 @@ def Nebenrechnungen(Mpars_in, df_Fpar_in):
 
     Mpars_out=Mpars_in
     df_Fpar_out=df_Fpar_in
-
+    print("Nebenrechnung: Mpars_In", Mpars_in)
     #############################################################
     #Sicherstellen das folgende Werte nicht exakt Null sind
     #############################################################
@@ -25,7 +25,7 @@ def Nebenrechnungen(Mpars_in, df_Fpar_in):
         Mpars_out["Y_CO2_P"]=1*10**(-25); # avoid division by Zero by setting parameter to a very small number
 
     ##globale Variablen zuweisen
-    V_L_0=df_Fpar_in["V_L"][0] #Startvolumen in m³ TODO- erötern: maximales Arbeitsvolumen oder Startvolumen
+    V_L_0=df_Fpar_in["V_L"][0] #Startvolumen in L TODO- erötern: maximales Arbeitsvolumen oder Startvolumen
     #############################################################
     # Berechnung der Sauerstofflöslichkeit zu Beginn jeder Phase
     #############################################################
@@ -59,7 +59,7 @@ def Nebenrechnungen(Mpars_in, df_Fpar_in):
 
     #Berechung der Leerrohrgeschwindigkeit
     v_g=Q_Air_sec/A_T #vg in m/sec 
-    
+    print(v_g)
     # Berechnung des kla Wertes für jede Phase
     Ne=5; #Newton Zahl für Rushton Impeller bei turbulenter Strömung nach Bates, 1963
     K_A=490 #constant for calc. P gassed fpr 2 Impellers
@@ -69,7 +69,8 @@ def Nebenrechnungen(Mpars_in, df_Fpar_in):
     P=Ne*n_impellers*Dichte*(df_Fpar_in["Drehzahl"].values/60)**3*d_I**5 #calculation Power input ungassed by Phase in Watt
     d=(1+(K_A*v_g)/math.sqrt(g*d_I))
     Pg=P/np.sqrt(d)
-    kLa=0.026*(Pg/V_L_0)**0.4*v_g**0.5*3600 #calc kLa in 1/h
+    V_L_m3=V_L_0/1000 #Medienvolumen in m³
+    kLa=0.026*(Pg/V_L_m3)**0.4*v_g**0.5*3600 #calc kLa in 1/h
     df_Fpar_out["kLa"]=kLa
     #print(df_Fpar_out["kLa"])
 

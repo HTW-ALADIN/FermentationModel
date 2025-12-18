@@ -17,15 +17,12 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
         with open(MODEL_PATH) as f:
             model = json.load(f)
             model_param_in= model[model_number] #dictionary
-            #print (model_param_in[ModelKeys.YPS1])
-
+            
     except json.JSONDecodeError:
         print("Invalid JSON input.")
-        pass
 
     # Nebenberechnung
     [model_param,ferm_param_df]=Nebenrechnungen(model_param_in,ferm_param_in_df)
-    
     #global constants
     data_rate=60 #data rate per hour
     Vm_norm=22.41396954 #molares Volumen in NL/mol bei Normbedingungen (0°C und 101,325 kPa) 
@@ -36,7 +33,7 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
     # nachfolgend Hauptberechnung
     for index, row in ferm_param_df.iterrows():
         # result_df hier befüllen
-        print("Phase:", row[InputKeys.phase])
+        #print("Phase:", row[InputKeys.phase])
         
         if index==0:
             c_x_0=row[InputKeys.c_x0]
@@ -54,14 +51,14 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             c_S1_0=y[-1,1]+row[InputKeys.bolus_c]
             c_S2_0=y[-1,2]+row[InputKeys.bolus_n]
             c_P_0=y[-1,3]
-            #print("c_P0",c_P_0)
+            print("c_P0",c_P_0)
+            print("c_x",c_x_0)
             c_DO_0=y[-1,4]
             O2_Out=y[-1,5]      #Konz. O2 in Abluft
             CO2_Out=y[-1,6]     #Konz. CO2 in Abluft
             y0=[c_x_0,c_S1_0,c_S2_0, c_P_0, c_DO_0, O2_Out, CO2_Out] #Startparameter in Vektor
             t_start=result.t[-1]
             t_ende=t_start+row[InputKeys.duration]
-            #print("Calc Phase: ",i," from ",t_start," - ",t_ende,"h")
 
         if row[InputKeys.duration]!=0:
             print("Calc Phase: ",index," from ",t_start," - ",t_ende,"h")
@@ -86,7 +83,7 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             sum_feeding = t_span*row[InputKeys.feed_c]
             len_t_span=len(t_span)
             Drehzahl = np.zeros(len_t_span)+row[InputKeys.rpm]
-            Begasungsrate = np.zeros(len_t_span)+row[InputKeys.q_air]
+            Q_Air = np.zeros(len_t_span)+row[InputKeys.q_air]
             Druck = np.zeros(len_t_span)+row[InputKeys.pressure]
         else:
             y=result.y.T #transform array
@@ -99,12 +96,14 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             sum_feeding = np.hstack((sum_feeding, temp_feed))
             len_t_span=len(t_span)
             Drehzahl = np.hstack((Drehzahl, np.zeros(len_t_span)+row[InputKeys.rpm]))
-            Begasungsrate = np.hstack((Begasungsrate, np.zeros(len_t_span)+row[InputKeys.q_air]))
+            Q_Air = np.hstack((Q_Air, np.zeros(len_t_span)+row[InputKeys.q_air]))
             Druck = np.hstack((Druck,np.zeros(len_t_span)+row[InputKeys.pressure]))
 
     #######################################
     # #Weitere Variablen berechnen
     #######################################
+    V_L=np.zeros(len(t_ges))+ferm_param_df[InputKeys.start_vol][0] #Platzhalter für Fermentationsvolumen in L
+    Begasungsrate=Q_Air/V_L
     c_ox_sat_DO=ferm_param_df[InputKeys.c_o2_sat][0] #Sauerstofflöslichkeit zu Beginn der Fermentation um DO zu berechnen
     c_inert_Luft=1-c_O2_Luft-c_CO2_Luft #Inertgasanteil der Luft
     c_inert_Abgas=np.zeros(len(t_ges))+1 
@@ -112,18 +111,17 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
     c_inert_Abgas=c_inert_Abgas-y_ges[:,6]
     delta_O2=np.zeros(len(t_ges))+c_O2_Luft
     delta_O2=delta_O2-y_ges[:,5]*c_inert_Luft/c_inert_Abgas
-    OUR=Begasungsrate*60/Vm_norm*delta_O2+1*10**(-10) #%Oxygen Uptake Rate in mol*L-1*h-1, last addition to avoid div by zero
-    OUR=OUR*1000 # Umrechnung in mmol
-
+    OUR=1000*((Begasungsrate*60)/Vm_norm*delta_O2+1*10**(-10)) #%Oxygen Uptake Rate in mmol*L-1*h-1, last addition to avoid div by zero
+    
     delta_CO2=np.zeros(len(t_ges))-c_CO2_Luft
     delta_CO2=delta_CO2+y_ges[:,6]*c_inert_Luft/c_inert_Abgas
-    CER=Begasungsrate*60/Vm_norm*delta_CO2 #Carbon Dioxide Evolution Rate in mol*L-1*h-1
-    CER=CER*1000 # Umrechnung in mmol
+    CER=1000*((Begasungsrate*60)/Vm_norm*delta_CO2) #Carbon Dioxide Evolution Rate in mmol*L-1*h-1
+    
     RQ=CER/OUR
     c_DO_proz=y_ges[:,4]/c_ox_sat_DO*100
-    V_L=np.zeros(len(t_ges))+ferm_param_df[InputKeys.start_vol][0]*1000 #Platzhalter für Fermentationsvolumen
+   
     #put results of solve_ivp into a dataframe
-    print("calculation_finished")
+    #print("calculation_finished")
     #stack 1D Arrays together
     calc=np.column_stack((sum_feeding,Begasungsrate,Drehzahl,Druck,OUR,CER,RQ,c_DO_proz,V_L))
     #print(calc.shape)
