@@ -16,7 +16,7 @@
         "c_x0": 0.1,
         "Q_In": 0,
         "Feed_N": null,
-        "Model": 1.0
+        "Model": "1"
     },
     {
         "Phase": 2,

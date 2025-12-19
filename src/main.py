@@ -9,6 +9,10 @@ from OutputAdapter.output_adapter_strategy import output_adapter_strategy
 from InputAdapter.input_adapter_strategy import input_adapter_strategy
 from typing import Tuple
 from Util.arg_parser import parser
+import logging
+import os
+
+logging.basicConfig(level=os.environ.get("LOG_LEVEL") or logging.INFO)
 
 
 def main() -> Tuple[pd.DataFrame, IOAdapter]:
@@ -27,8 +31,8 @@ if __name__ == "__main__":
     result_df = calculate(input_df)
 
     output = output_adapter.transform_data(result_df)
-    # print(output)
-    # sys.stdout.write(json.dumps(output))
+
+    # TODO: explizite Dateiausgabe zurückbauen
     with open("output.json", "w") as f:
         json.dump(output, f)
     multiplot_ferm(result_df)

@@ -1,5 +1,5 @@
-[
-    {
+{
+    "1": {
         "Modell": 1,
         "Beschreibung": "nicht wachstumsassoziierte Ethanolbildung mit hohem Ks --> h\u00f6here Biomassegehalte bei niedrigen Substrat 1 konz.",
         "Mikroorganismus": "S.cerevisiae",
@@ -28,7 +28,7 @@
         "T_max": 41.48,
         "Bemerkung": null
     },
-    {
+    "2": {
         "Modell": 2,
         "Beschreibung": null,
         "Mikroorganismus": "E.coli",
@@ -57,7 +57,7 @@
         "T_max": 45.77,
         "Bemerkung": "erdachte Parameter! Nicht getestet"
     },
-    {
+    "3": {
         "Modell": 3,
         "Beschreibung": null,
         "Mikroorganismus": "E.coli Biomass",
@@ -86,7 +86,7 @@
         "T_max": 45.77,
         "Bemerkung": "erdachte Parameter! Nicht getestet"
     },
-    {
+    "4": {
         "Modell": 4,
         "Beschreibung": "PHB Produktion",
         "Mikroorganismus": "Cupriavidus necator",
@@ -115,4 +115,4 @@
         "T_max": null,
         "Bemerkung": "Parameter aus Praktikum"
     }
-]
+}

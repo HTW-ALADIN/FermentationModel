@@ -2,6 +2,7 @@ from .base_input_adapter import InputAdapter
 from typing import ClassVar
 import pandas as pd
 import json
+import logging
 
 
 class FileInputAdapter(InputAdapter):
@@ -14,11 +15,11 @@ class FileInputAdapter(InputAdapter):
                 data = json.load(f)
             input_df = pd.DataFrame(data)
         except json.JSONDecodeError as error:
-            print("Invalid JSON input.")
-            print(error)
+            logging.error("Invalid JSON input.")
+            logging.error(error)
             raise
         except FileNotFoundError as error:
-            print("Invalid file path.")
-            print(error)
+            logging.error("Invalid file path.")
+            logging.error(error)
             raise
         return input_df

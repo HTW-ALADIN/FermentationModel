@@ -8,22 +8,22 @@ from Nebenrechnungen import Nebenrechnungen
 from Fx_ODE_Bioreaktor import (
     Bioreaktor_ODE,
 )  # hier wird das Differentialgleichungssystem definiert
+import logging
+
 
 MODEL_PATH = "./src/DataModels/model_db.json"
 
 
 def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
     try:
-        model_number = int(
-            ferm_param_in_df[InputKeys.model.value][0] - 1
-        )  # "-1" as indices start with 0 and model numbers start with 1
-        print("Genutztes Model hat die Nummer: ", model_number + 1)
+        model_id = ferm_param_in_df[InputKeys.model.value][0]
+        logging.info(f" Model {model_id} is being used.")
         with open(MODEL_PATH) as f:
             model = json.load(f)
-            model_param_in = model[model_number]  # dictionary
+            model_param_in = model[model_id]  # dictionary
 
     except json.JSONDecodeError:
-        print("Invalid JSON input.")
+        logging.error("Invalid JSON input.")
 
     # Nebenberechnung
     [model_param, ferm_param_df] = Nebenrechnungen(model_param_in, ferm_param_in_df)
@@ -36,7 +36,7 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
     # nachfolgend Hauptberechnung
     for index, row in ferm_param_df.iterrows():
         # result_df hier befüllen
-        # print("Phase:", row[InputKeys.phase])
+        logging.debug(f" Phase: {row[InputKeys.phase]}")
 
         if index == 0:
             c_x_0 = row[InputKeys.c_x0]
@@ -62,8 +62,8 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             c_S1_0 = y[-1, 1] + row[InputKeys.bolus_c]
             c_S2_0 = y[-1, 2] + row[InputKeys.bolus_n]
             c_P_0 = y[-1, 3]
-            print("c_P0", c_P_0)
-            print("c_x", c_x_0)
+            logging.info("c_P0: {c_P0}")
+            logging.info("c_x: {c_x}")
             c_DO_0 = y[-1, 4]
             O2_Out = y[-1, 5]  # Konz. O2 in Abluft
             CO2_Out = y[-1, 6]  # Konz. CO2 in Abluft
@@ -80,7 +80,7 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             t_ende = t_start + row[InputKeys.duration]
 
         if row[InputKeys.duration] != 0:
-            print("Calc Phase: ", index, " from ", t_start, " - ", t_ende, "h")
+            logging.info("Calc Phase: {index} from {t_start} - {t_ende} h")
             datapoints = row[InputKeys.duration] * data_rate
             t_span = np.linspace(t_start, t_ende, datapoints)
             if datapoints < 50:
@@ -107,9 +107,9 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
         if index == 0:
             y = result.y.T
             y_ges = y  # transform array
-            # print("dim y_ges", y_ges.shape)
+            logging.debug(f" dim y_ges: {y_ges.shape}")
             t_ges = np.atleast_2d(result.t).T
-            # print("dim t_ges", t_ges.shape)
+            logging.debug(f" dim t_ges: {t_ges.shape}")
             sum_feeding = t_span * row[InputKeys.feed_c]
             len_t_span = len(t_span)
             Drehzahl = np.zeros(len_t_span) + row[InputKeys.rpm]
@@ -158,13 +158,13 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
     RQ = CER / OUR
     c_DO_proz = y_ges[:, 4] / c_ox_sat_DO * 100
 
-    # put results of solve_ivp into a dataframe
-    # print("calculation_finished")
+    # put results of solve_ivp into a dataframelation_finished")
+    logging.debug("calculation_finished")
     # stack 1D Arrays together
     calc = np.column_stack(
         (sum_feeding, Begasungsrate, Drehzahl, Druck, OUR, CER, RQ, c_DO_proz, V_L)
     )
-    # print(calc.shape)
+    logging.debug(f"result data shape: {calc.shape}")
     results_columns = [
         "t",
         "c_x",

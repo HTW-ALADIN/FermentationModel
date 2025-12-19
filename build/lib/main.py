@@ -9,6 +9,7 @@ from OutputAdapter.chart_js_adapter2 import ChartJSAdapter
 from InputAdapter.file_input_adapter import FileInputAdapter
 from typing import Tuple
 from Util.arg_parser import parser
+import logging
 
 
 def main() -> Tuple[pd.DataFrame, IOAdapter]:
@@ -23,7 +24,6 @@ def main() -> Tuple[pd.DataFrame, IOAdapter]:
     arg = sys.argv[1]
 
     input_df = input_adapter.transform_data(arg)
-    # print(input_df)
     """
     TODO: Selection logic (cli-parameters) to select OutputAdapter if required.
     Default is ChartJSAdapter
