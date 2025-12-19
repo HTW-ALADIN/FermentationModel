@@ -1,8 +1,12 @@
 from .base_input_adapter import InputAdapter
+from typing import ClassVar
 import pandas as pd
 import json
 
+
 class FileInputAdapter(InputAdapter):
+    __qualname__: ClassVar[str] = "file"
+
     def transform_data(self, file_path: str) -> pd.DataFrame:
         input_df = None
         try:
