@@ -45,7 +45,7 @@ This will take the data from the file `test/test_data/test_input.json` and pass 
 As this may be inconvenient depending on the length of the output, you may "redirect" (<> operators) the result (and any other e.g. print-statements) into a file. This is done with the following command:
 
 ```sh
-uv run src/main.py "$(cat test/test_data/test_input.json)"" > output.json
+uv run src/main.py "$(cat test/test_data/test_input.json)" > output.json
 ```
 
 ## Installing new packages
@@ -77,7 +77,6 @@ uv run pytest --cov=.
 ## Updating "interfaces"
 
 To reduce the coupling of the current variable naming of the input-format and the models to the code that performs the calculation, the DataModels may used. If the name of a variable changes (e.g. in the input-format) only the name of the right hand side of the respective enum has to be adapted. If a new variables is introduced, it should be added to the DataModels as well.
-
 
 ## USAGE with eXCEl
 
