@@ -1,0 +1,26 @@
+import argparse
+
+parser = argparse.ArgumentParser(
+    prog="FermentationModel",
+    description="This program calculates the result of a fermentation process based on a set of input parameters. The fermentation model supports multiple phases, as well as batch and flow processing.",
+)
+parser.add_argument(
+    "-p",
+    "--parameters",
+    type=str,
+    help="The input parameters for the fermentation model. Can be passed as json or as a path to a json-file. Default is json.",
+)
+parser.add_argument(
+    "-i",
+    "--input-type",
+    default="json",
+    type="json" | "file",
+    help='The type with which the input parameters are being passed. Can be "json" or "file". Default is "json". "file" expects a path to a valid json-file.',
+)
+parser.add_argument(
+    "-o",
+    "--output-type",
+    default="df",
+    type=str,
+    help='The type of output. Can be "chart" or "df". Default is "df" and outputs a dataframe. "chart" transforms the dataframe into plot descriptions for chartjs.',
+)
