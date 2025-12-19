@@ -7,7 +7,7 @@ import logging
 
 
 class STDINAdapter(InputAdapter):
-    __qualname__: ClassVar[str] = "json"
+    __qualname__: ClassVar[str] = "stdi"
 
     def transform_data(self, data: str) -> pd.DataFrame:
         try:

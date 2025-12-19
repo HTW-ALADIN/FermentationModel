@@ -22,14 +22,15 @@ parser.add_argument(
 parser.add_argument(
     "-i",
     "--input-type",
-    default="json",
-    choices=["json", "file"],
+    default="stdi",
+    choices=["stdi", "file"],
     help='The type with which the input parameters are being passed. Can be "json" or "file". Default is "json". "file" expects a path to a valid json-file.',
 )
 parser.add_argument(
     "-o",
-    "--output-type",
+    "--output-format",
     default="df",
     choices=["df", "chart", "katzberg"],
-    help='The type of output. Can be "chart" or "df". Default is "df" and outputs a dataframe. "chart" transforms the dataframe into plot descriptions for chartjs.',
+    help='The format of output. Can be "chart" or "df". Default is "df" and outputs a dataframe. "chart" transforms the dataframe into plot descriptions for chartjs.',
 )
+parser.add_argument("-f", "--file", help="Output to file. Expects a valid file path.")

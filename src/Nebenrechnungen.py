@@ -13,7 +13,7 @@ def Nebenrechnungen(Mpars_in, df_Fpar_in):
 
     Mpars_out = Mpars_in
     df_Fpar_out = df_Fpar_in
-    logging.info(f" Nebenrechnung: {Mpars_in}")
+    logging.debug(f" Nebenrechnung: {Mpars_in}")
     #############################################################
     # Sicherstellen das folgende Werte nicht exakt Null sind
     #############################################################
@@ -66,7 +66,7 @@ def Nebenrechnungen(Mpars_in, df_Fpar_in):
 
     # Berechung der Leerrohrgeschwindigkeit
     v_g = Q_Air_sec / A_T  # vg in m/sec
-    logging.info(f" v_g: {v_g}")
+    logging.debug(f" v_g: {v_g}")
     # Berechnung des kla Wertes für jede Phase
     Ne = 5
     # Newton Zahl für Rushton Impeller bei turbulenter Strömung nach Bates, 1963

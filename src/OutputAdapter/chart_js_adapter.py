@@ -1,5 +1,6 @@
 from .base_output_adapter import OutputAdapter
 import pandas as pd
+import json
 
 from typing import Generic, TypeVar, ClassVar
 
@@ -78,3 +79,6 @@ class ChartJSAdapter(OutputAdapter):
             },
         }
         return diagramData
+
+    def serialize(self, data: ChartDataset) -> str:
+        return json.dumps(data)

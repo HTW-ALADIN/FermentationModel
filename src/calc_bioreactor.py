@@ -62,8 +62,8 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             c_S1_0 = y[-1, 1] + row[InputKeys.bolus_c]
             c_S2_0 = y[-1, 2] + row[InputKeys.bolus_n]
             c_P_0 = y[-1, 3]
-            logging.info("c_P0: {c_P0}")
-            logging.info("c_x: {c_x}")
+            logging.debug(f"c_P0: {c_P_0}")
+            logging.debug(f"c_x: {c_x_0}")
             c_DO_0 = y[-1, 4]
             O2_Out = y[-1, 5]  # Konz. O2 in Abluft
             CO2_Out = y[-1, 6]  # Konz. CO2 in Abluft
@@ -80,7 +80,7 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             t_ende = t_start + row[InputKeys.duration]
 
         if row[InputKeys.duration] != 0:
-            logging.info("Calc Phase: {index} from {t_start} - {t_ende} h")
+            logging.info(f"Calc Phase: {index} from {t_start} - {t_ende} h")
             datapoints = row[InputKeys.duration] * data_rate
             t_span = np.linspace(t_start, t_ende, datapoints)
             if datapoints < 50:

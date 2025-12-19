@@ -1,5 +1,6 @@
 from .base_output_adapter import OutputAdapter
 import pandas as pd
+import json
 
 from typing import Any, ClassVar
 
@@ -29,3 +30,6 @@ class KatzbergAdapter(OutputAdapter):
             "V": df["V_L"].to_list(),
         }
         return diagramData
+
+    def serialize(self, data: Any):
+        return json.dumps(data)
