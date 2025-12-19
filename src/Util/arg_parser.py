@@ -30,6 +30,6 @@ parser.add_argument(
     "-o",
     "--output-type",
     default="df",
-    type=str,
+    choices=["df", "chart", "katzberg"],
     help='The type of output. Can be "chart" or "df". Default is "df" and outputs a dataframe. "chart" transforms the dataframe into plot descriptions for chartjs.',
 )
