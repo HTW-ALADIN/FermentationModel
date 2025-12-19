@@ -7,4 +7,4 @@ class DFAdapter(OutputAdapter):
     __qualname__: ClassVar[str] = "df"
 
     def transform_data(self, df: pd.DataFrame) -> pd.DataFrame:
-        return df
+        return df.to_json()
