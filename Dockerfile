@@ -19,4 +19,6 @@ COPY . /app
 WORKDIR /app
 RUN uv sync --locked
 
+RUN chmod +x calc_fermentation.sh
+
 CMD ["tail", "-f","/dev/null"]
