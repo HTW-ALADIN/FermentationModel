@@ -76,7 +76,8 @@ uv run pytest --cov=.
 
 ## Updating "interfaces"
 
-To reduce the coupling of the current variable naming of the input-format and the models to the code that performs the calculation, the DataModels may used. If the name of a variable changes (e.g. in the input-format) only the name of the right hand side of the respective enum has to be adapted. If a new variables is introduced, it should be added to the DataModels as well.
+To reduce the coupling of the current variable naming of the input-format and the models to the code that performs the calculation, the DataModels may be used. If the name of a variable changes (e.g. in the input-format) only the name of the right hand side of the respective enum has to be adapted. If a new variables is introduced, it should be added to the DataModels as well.
+TODO: Adapt for string values in Fx_ODE_Bioreaktor.py as well.
 
 ## USAGE with eXCEl
 

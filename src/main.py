@@ -1,8 +1,8 @@
 import sys
 import pandas as pd
 
-from calc_bioreactor import calculate
-from multiplot_ferm import multiplot_ferm
+from calc.calc_bioreactor import calculate
+from Util.multiplot_ferm import multiplot_ferm
 from OutputAdapter.base_output_adapter import OutputAdapter
 from OutputAdapter.output_adapter_strategy import output_adapter_strategy
 from InputAdapter.input_adapter_strategy import input_adapter_strategy

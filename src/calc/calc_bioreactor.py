@@ -3,9 +3,8 @@ import json
 import numpy as np
 from scipy.integrate import solve_ivp  # solve odes
 from DataModels.input_definition import InputKeys
-from DataModels.model_definition import ModelKeys
-from Nebenrechnungen import Nebenrechnungen
-from Fx_ODE_Bioreaktor import (
+from calc.Nebenrechnungen import Nebenrechnungen
+from calc.Fx_ODE_Bioreaktor import (
     Bioreaktor_ODE,
 )  # hier wird das Differentialgleichungssystem definiert
 import logging
