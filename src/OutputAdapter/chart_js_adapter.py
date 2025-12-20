@@ -22,16 +22,16 @@ class ChartJSAdapter(OutputAdapter):
         """
         Transforms the calculation-output of the fermentation model into currently 4 charts in the data-format of the Chart.js-library.
         """
-        
+
         df["Drehzahl"] = df["Drehzahl"] / 10
-        
-        hochminus1="\u{207B}\u{00B9}";
-        cdot="\u{00B7}";
-        labelfontsize=18;
-        oliv="#A0C382";
-        petrol="#5F9B8C";
-        sun_yellow="#FAC846";
-        orange="#FF7D2D";
+
+        hochminus1 = r"\u{207B}\u{00B9}"
+        cdot = r"\u{00B7}"
+        labelfontsize = 18
+        oliv = "#A0C382"
+        petrol = "#5F9B8C"
+        sun_yellow = "#FAC846"
+        orange = "#FF7D2D"
 
         charts = {}
 
@@ -73,254 +73,332 @@ class ChartJSAdapter(OutputAdapter):
                 ],
             },
             "options": {
-                    "legend": {
-                        "display": True
+                "legend": {"display": True},
+                "scales": {
+                    "x": {
+                        "type": "linear",
+                        "title": {
+                            "display": True,
+                            "text": "t in h",
+                            "font": {"size": labelfontsize},
                         },
-                    "scales": {
-                
-                            "x": {
-                                "type":"linear",
-                                "title": {"display": True, "text":"t in h", "font": {"size":labelfontsize}},
-                                "ticks": {"min":0, "stepSize": 1}
-                            },
-                            "yL":{
-                                "position":"left",
-                                "type": "linear",
-                                "display": True,
-                                "grid": {"drawOnChartArea": True},
-                                "min": 0,
-                                "title": {"display": True, "text":"c(S1) [g"+cdot+"L"+hochminus1+"]", "font": {"size":labelfontsize}},
-                                
-                            },
-                            "yR":{
-                                "position":"right",
-                                "type": "linear",
-                                "display": True,
-                                "grid": {"drawOnChartArea": False},
-                                "type": "linear",
-                                "min": 0,
-                                "title": {"display": True, "text":"c(S2) [g"+cdot+"L"+hochminus1+"]", "font": {"size":labelfontsize}, "color":petrol},
-                                "ticks": {"color": petrol}
-                            },
+                        "ticks": {"min": 0, "stepSize": 1},
                     },
-                    "plugins":{"legend": {"position":"bottom"},
-                            "title": {"display": True, "text":"Substratkonzentration","font": {"size":labelfontsize+2}}       
-                    }
-                }
+                    "yL": {
+                        "position": "left",
+                        "type": "linear",
+                        "display": True,
+                        "grid": {"drawOnChartArea": True},
+                        "min": 0,
+                        "title": {
+                            "display": True,
+                            "text": "c(S1) [g" + cdot + "L" + hochminus1 + "]",
+                            "font": {"size": labelfontsize},
+                        },
+                    },
+                    "yR": {
+                        "position": "right",
+                        "type": "linear",
+                        "display": True,
+                        "grid": {"drawOnChartArea": False},
+                        "type": "linear",
+                        "min": 0,
+                        "title": {
+                            "display": True,
+                            "text": "c(S2) [g" + cdot + "L" + hochminus1 + "]",
+                            "font": {"size": labelfontsize},
+                            "color": petrol,
+                        },
+                        "ticks": {"color": petrol},
+                    },
+                },
+                "plugins": {
+                    "legend": {"position": "bottom"},
+                    "title": {
+                        "display": True,
+                        "text": "Substratkonzentration",
+                        "font": {"size": labelfontsize + 2},
+                    },
+                },
+            },
         }
 
         charts["Chart_2"] = {
-                "type": "line",
-                "data": {
-                    "labels": df["t"],
-                    "datasets": [
-                        {
-                            "label": "Druck (p)",
-                            "yAxisID": "yL",
-                            "fill": False, 
-                            "lineTension":0.2,
-                            "pointRadius": 0,
-                            "backgroundColor": orange ,
-                            "borderColor": orange, 
-                            "data": df["Druck"]
-                        },
-                        {
-                            "label": "Begasungsrate Luft (Q_Air)",
-                            "yAxisID": "yL",
-                            "fill": False,
-                            "lineTension":0.2,
-                            "pointRadius": 0, 
-                            "backgroundColor": sun_yellow ,
-                            "borderColor": sun_yellow, 
-                            "data": df["Q_Air"]
-                        },
-                        {
-                            "label": "Drehzahl (n)",
-                            "yAxisID": "yR",
-                            "fill": False, 
-                            "lineTension": 0.2,
-                            "pointRadius": 0,
-                            "backgroundColor": "black",
-                            "borderColor": "black",
-                            "data": df["Drehzahl"]
-                        },
-                        {
-                            "label": "Gel\u{00F6}stsauerstoff (DO)",
-                            "yAxisID": "yR",
-                            "fill": False, 
-                            "lineTension": 0.2,
-                            "pointRadius": 0,
-                            "backgroundColor": oliv,
-                            "borderColor": oliv,
-                            "data": df["c_DO"]
-                        }
-
-                ]
+            "type": "line",
+            "data": {
+                "labels": df["t"],
+                "datasets": [
+                    {
+                        "label": "Druck (p)",
+                        "yAxisID": "yL",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": orange,
+                        "borderColor": orange,
+                        "data": df["Druck"],
+                    },
+                    {
+                        "label": "Begasungsrate Luft (Q_Air)",
+                        "yAxisID": "yL",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": sun_yellow,
+                        "borderColor": sun_yellow,
+                        "data": df["Q_Air"],
+                    },
+                    {
+                        "label": "Drehzahl (n)",
+                        "yAxisID": "yR",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": "black",
+                        "borderColor": "black",
+                        "data": df["Drehzahl"],
+                    },
+                    {
+                        "label": "Gel" + r"\u{00F6}" + "stsauerstoff (DO)",
+                        "yAxisID": "yR",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": oliv,
+                        "borderColor": oliv,
+                        "data": df["c_DO"],
+                    },
+                ],
             },
             "options": {
                 "legend": {"display": True},
                 "scales": {
-            
-                        "x": {"type":"linear",
-                                "title": {"display": True, "text":"t in h", "font": {"size":labelfontsize}},
-                                "ticks": {"min":0, "stepSize": 1}
-                            },
-                        "yL":{
-                            "position":"left",
-                            "type": "linear",
+                    "x": {
+                        "type": "linear",
+                        "title": {
                             "display": True,
-                            "grid": {"drawOnChartArea": True},
-                            "min": 0,
-                            "title": {"display": True, "text":"p [barg], Q_Air [NL"+cdot+"L"+hochminus1+cdot+"min"+hochminus1+"]", "font": {"size":labelfontsize}},
+                            "text": "t in h",
+                            "font": {"size": labelfontsize},
                         },
-                        "yR":{
-                            "position":"right",
-                            "type": "linear",
+                        "ticks": {"min": 0, "stepSize": 1},
+                    },
+                    "yL": {
+                        "position": "left",
+                        "type": "linear",
+                        "display": True,
+                        "grid": {"drawOnChartArea": True},
+                        "min": 0,
+                        "title": {
                             "display": True,
-                            "grid": {"drawOnChartArea": False},
-                            "type": "linear",
-                            "min": 0,
-                            "title": {"display": True, "text":"n/10[min"+hochminus1+"], DO [%]", "font": {"size":labelfontsize}, "color":"black"},
-                            "ticks": {"color": "black"}
+                            "text": "p [barg], Q_Air [NL"
+                            + cdot
+                            + "L"
+                            + hochminus1
+                            + cdot
+                            + "min"
+                            + hochminus1
+                            + "]",
+                            "font": {"size": labelfontsize},
                         },
+                    },
+                    "yR": {
+                        "position": "right",
+                        "type": "linear",
+                        "display": True,
+                        "grid": {"drawOnChartArea": False},
+                        "type": "linear",
+                        "min": 0,
+                        "title": {
+                            "display": True,
+                            "text": "n/10[min" + hochminus1 + "], DO [%]",
+                            "font": {"size": labelfontsize},
+                            "color": "black",
+                        },
+                        "ticks": {"color": "black"},
+                    },
                 },
-                "plugins":{"legend": {"position":"bottom"},
-                        "title": {"display": True, "text":"Begasungsbezogen","font": {"size":labelfontsize+2}}       
-                }
-            }
+                "plugins": {
+                    "legend": {"position": "bottom"},
+                    "title": {
+                        "display": True,
+                        "text": "Begasungsbezogen",
+                        "font": {"size": labelfontsize + 2},
+                    },
+                },
+            },
         }
 
         charts["Chart_3"] = {
-                "type": "line",
-                "data": {
-                    "labels": df["t"],
-                    "datasets": [
-                        {
-                            "label": "Biotrockenmasse c(x)",
-                            "yAxisID": "yL",
-                            "fill":False, 
-                            "lineTension":0.2, 
-                            "pointRadius": 0, 
-                            "backgroundColor": orange , 
-                            "borderColor": orange, 
-                            "data": df["c_x"]
-                        },
-                        {
-                            "label": "Produktkonz. c(p)",
-                            "yAxisID": "yL",
-                            "fill":False, 
-                            "lineTension":0.2,  
-                            "pointRadius": 0, 
-                            "backgroundColor": sun_yellow ,
-                            "borderColor": sun_yellow,
-                            "data": df["c_P"]
-                        },
-                        {
-                            "label": "Volumen (V)",
-                            "yAxisID": "yR",
-                            "fill":False, 
-                            "lineTension":0.2,
-                            "pointRadius": 0, 
-                            "backgroundColor": petrol,
-                            "borderColor": petrol, 
-                            "data": df["V"]
-                        }
-
-                ]
+            "type": "line",
+            "data": {
+                "labels": df["t"],
+                "datasets": [
+                    {
+                        "label": "Biotrockenmasse c(x)",
+                        "yAxisID": "yL",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": orange,
+                        "borderColor": orange,
+                        "data": df["c_x"],
+                    },
+                    {
+                        "label": "Produktkonz. c(p)",
+                        "yAxisID": "yL",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": sun_yellow,
+                        "borderColor": sun_yellow,
+                        "data": df["c_P"],
+                    },
+                    {
+                        "label": "Volumen (V)",
+                        "yAxisID": "yR",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": petrol,
+                        "borderColor": petrol,
+                        "data": df["V"],
+                    },
+                ],
             },
             "options": {
                 "legend": {"display": True},
                 "scales": {
-            
-                        "x": {type:"linear",
-                                "title": {"display": True, "text":"t in h", "font": {"size":labelfontsize}},
-                                "ticks": {min:0, "stepSize": 1}
-                            },
-                        "yL":{
-                            "position":"left",
-                            "type": "linear",
+                    "x": {
+                        type: "linear",
+                        "title": {
                             "display": True,
-                            "grid": {"drawOnChartArea": True},
-                            "min": 0,
-                            "title": {"display": True, "text":"c(P), c(X) [g"+cdot+"L"+hochminus1+"]", "font": {"size":labelfontsize}},
+                            "text": "t in h",
+                            "font": {"size": labelfontsize},
                         },
-                        "yR":{
-                            "position":"right",
-                            "type": "linear",
+                        "ticks": {min: 0, "stepSize": 1},
+                    },
+                    "yL": {
+                        "position": "left",
+                        "type": "linear",
+                        "display": True,
+                        "grid": {"drawOnChartArea": True},
+                        "min": 0,
+                        "title": {
                             "display": True,
-                            "grid": {"drawOnChartArea": False},
-                            "type": "linear",
-                            "min": 0,
-                            "title": {"display": True, "text":"V [L]", "font": {"size":labelfontsize}, "color":"black"},
-                            "ticks": {"color": "black"}
+                            "text": "c(P), c(X) [g" + cdot + "L" + hochminus1 + "]",
+                            "font": {"size": labelfontsize},
                         },
+                    },
+                    "yR": {
+                        "position": "right",
+                        "type": "linear",
+                        "display": True,
+                        "grid": {"drawOnChartArea": False},
+                        "type": "linear",
+                        "min": 0,
+                        "title": {
+                            "display": True,
+                            "text": "V [L]",
+                            "font": {"size": labelfontsize},
+                            "color": "black",
+                        },
+                        "ticks": {"color": "black"},
+                    },
                 },
-                "plugins":{"legend": {"position":"bottom"},
-                        "title": {"display": True, "text":"Produkte und Volumen","font": {"size":labelfontsize+2}}       
-                }
-            }
+                "plugins": {
+                    "legend": {"position": "bottom"},
+                    "title": {
+                        "display": True,
+                        "text": "Produkte und Volumen",
+                        "font": {"size": labelfontsize + 2},
+                    },
+                },
+            },
         }
 
         charts["Chart_4"] = {
-                "type": "line",
-                "data": {
-                    "labels": df["t"],
-                    "datasets": [
-                        {
-                            "label": "Oxygen uptake rate (OUR)",
-                            "yAxisID": "yL",
-                            "fill":False, 
-                            "lineTension":0.2,  
-                            "pointRadius": 0,
-                            "backgroundColor": "brown" , 
-                            "borderColor": "brown",
-                            "data": df["OUR"]
-                        },
-                
-                        {
-                            "label": "Respiratorischer Quotient (RQ)",
-                            "yAxisID": "yR",
-                            "fill":False, 
-                            "lineTension":0.2,  
-                            "pointRadius": 0, 
-                            "backgroundColor": petrol,
-                            "borderColor": petrol, 
-                            "data": df["RQ"]
-                        }
-
-                ]
+            "type": "line",
+            "data": {
+                "labels": df["t"],
+                "datasets": [
+                    {
+                        "label": "Oxygen uptake rate (OUR)",
+                        "yAxisID": "yL",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": "brown",
+                        "borderColor": "brown",
+                        "data": df["OUR"],
+                    },
+                    {
+                        "label": "Respiratorischer Quotient (RQ)",
+                        "yAxisID": "yR",
+                        "fill": False,
+                        "lineTension": 0.2,
+                        "pointRadius": 0,
+                        "backgroundColor": petrol,
+                        "borderColor": petrol,
+                        "data": df["RQ"],
+                    },
+                ],
             },
             "options": {
                 "legend": {"display": True},
                 "scales": {
-            
-                         "x": {"type":"linear",
-                                "title": {"display": True, "text":"t in h", "font": {"size":labelfontsize}},
-                                "ticks": {"min":0, "stepSize": 1}
-                            },
-                        "yL":{
-                            "position":"left",
-                            "type": "linear",
+                    "x": {
+                        "type": "linear",
+                        "title": {
                             "display": True,
-                            "grid": {"drawOnChartArea": True},
-                            "min": 0,
-                            "title": {"display": True, "text":"OUR [mmol"+cdot+"L"+hochminus1+cdot+"h"+hochminus1+"]", "font": {"size":labelfontsize}},
+                            "text": "t in h",
+                            "font": {"size": labelfontsize},
                         },
-                        "yR":{
-                            "position":"right",
-                            "type": "linear",
+                        "ticks": {"min": 0, "stepSize": 1},
+                    },
+                    "yL": {
+                        "position": "left",
+                        "type": "linear",
+                        "display": True,
+                        "grid": {"drawOnChartArea": True},
+                        "min": 0,
+                        "title": {
                             "display": True,
-                            "grid": {"drawOnChartArea": False},
-                            "type": "linear",
-                            "min": 0,
-                            "title": {"display": True, "text":"RQ [-]", "font": {"size":labelfontsize}, "color":petrol},
-                            "ticks": {"color": petrol}
+                            "text": "OUR [mmol"
+                            + cdot
+                            + "L"
+                            + hochminus1
+                            + cdot
+                            + "h"
+                            + hochminus1
+                            + "]",
+                            "font": {"size": labelfontsize},
                         },
+                    },
+                    "yR": {
+                        "position": "right",
+                        "type": "linear",
+                        "display": True,
+                        "grid": {"drawOnChartArea": False},
+                        "type": "linear",
+                        "min": 0,
+                        "title": {
+                            "display": True,
+                            "text": "RQ [-]",
+                            "font": {"size": labelfontsize},
+                            "color": petrol,
+                        },
+                        "ticks": {"color": petrol},
+                    },
                 },
-                "plugins":{"legend": {"position":"bottom"},
-                        "title": {"display": True, "text":"Abgasanalyse","font": {"size":labelfontsize+2}}       
-                }
-            }
+                "plugins": {
+                    "legend": {"position": "bottom"},
+                    "title": {
+                        "display": True,
+                        "text": "Abgasanalyse",
+                        "font": {"size": labelfontsize + 2},
+                    },
+                },
+            },
         }
 
         return charts
