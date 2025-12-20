@@ -38,7 +38,7 @@ class ChartJSAdapter(OutputAdapter):
         charts["Chart_1"] = {
             "type": "line",
             "data": {
-                "labels": df["t"],
+                "labels": df["t"].to_list(),
                 "datasets": [
                     {
                         "label": "Substrat 1 (S1)",
@@ -48,7 +48,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": orange,
                         "borderColor": orange,
-                        "data": df["c_S1"],
+                        "data": df["c_S1"].to_list(),
                     },
                     {
                         "label": "Summe Feeding S1",
@@ -58,7 +58,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": sun_yellow,
                         "borderColor": sun_yellow,
-                        "data": df["Sum_Feed"],
+                        "data": df["Sum_Feed"].to_list(),
                     },
                     {
                         "label": "Substrat 2 (S2)",
@@ -68,7 +68,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": "petrol",
                         "borderColor": "petrol",
-                        "data": df["c_S2"],
+                        "data": df["c_S2"].to_list(),
                     },
                 ],
             },
@@ -126,7 +126,7 @@ class ChartJSAdapter(OutputAdapter):
         charts["Chart_2"] = {
             "type": "line",
             "data": {
-                "labels": df["t"],
+                "labels": df["t"].to_list(),
                 "datasets": [
                     {
                         "label": "Druck (p)",
@@ -136,7 +136,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": orange,
                         "borderColor": orange,
-                        "data": df["Druck"],
+                        "data": df["Druck"].to_list(),
                     },
                     {
                         "label": "Begasungsrate Luft (Q_Air)",
@@ -146,7 +146,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": sun_yellow,
                         "borderColor": sun_yellow,
-                        "data": df["Q_Air"],
+                        "data": df["Begasungsrate"].to_list(),
                     },
                     {
                         "label": "Drehzahl (n)",
@@ -156,7 +156,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": "black",
                         "borderColor": "black",
-                        "data": df["Drehzahl"],
+                        "data": df["Drehzahl"].to_list(),
                     },
                     {
                         "label": "Gel" + r"\u{00F6}" + "stsauerstoff (DO)",
@@ -166,7 +166,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": oliv,
                         "borderColor": oliv,
-                        "data": df["c_DO"],
+                        "data": df["c_DO"].to_list(),
                     },
                 ],
             },
@@ -231,7 +231,7 @@ class ChartJSAdapter(OutputAdapter):
         charts["Chart_3"] = {
             "type": "line",
             "data": {
-                "labels": df["t"],
+                "labels": df["t"].to_list(),
                 "datasets": [
                     {
                         "label": "Biotrockenmasse c(x)",
@@ -241,7 +241,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": orange,
                         "borderColor": orange,
-                        "data": df["c_x"],
+                        "data": df["c_x"].to_list(),
                     },
                     {
                         "label": "Produktkonz. c(p)",
@@ -251,7 +251,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": sun_yellow,
                         "borderColor": sun_yellow,
-                        "data": df["c_P"],
+                        "data": df["c_P"].to_list(),
                     },
                     {
                         "label": "Volumen (V)",
@@ -261,7 +261,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": petrol,
                         "borderColor": petrol,
-                        "data": df["V"],
+                        "data": df["V_L"].to_list(),
                     },
                 ],
             },
@@ -269,13 +269,13 @@ class ChartJSAdapter(OutputAdapter):
                 "legend": {"display": True},
                 "scales": {
                     "x": {
-                        type: "linear",
+                        "type": "linear",
                         "title": {
                             "display": True,
                             "text": "t in h",
                             "font": {"size": labelfontsize},
                         },
-                        "ticks": {min: 0, "stepSize": 1},
+                        "ticks": {"min": 0, "stepSize": 1},
                     },
                     "yL": {
                         "position": "left",
@@ -319,7 +319,7 @@ class ChartJSAdapter(OutputAdapter):
         charts["Chart_4"] = {
             "type": "line",
             "data": {
-                "labels": df["t"],
+                "labels": df["t"].to_list(),
                 "datasets": [
                     {
                         "label": "Oxygen uptake rate (OUR)",
@@ -329,7 +329,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": "brown",
                         "borderColor": "brown",
-                        "data": df["OUR"],
+                        "data": df["OUR"].to_list(),
                     },
                     {
                         "label": "Respiratorischer Quotient (RQ)",
@@ -339,7 +339,7 @@ class ChartJSAdapter(OutputAdapter):
                         "pointRadius": 0,
                         "backgroundColor": petrol,
                         "borderColor": petrol,
-                        "data": df["RQ"],
+                        "data": df["RQ"].to_list(),
                     },
                 ],
             },
