@@ -19,4 +19,4 @@ COPY . /app
 WORKDIR /app
 RUN uv sync --locked
 
-CMD ["-f","/dev/null"]
+CMD ["tail", "-f","/dev/null"]
