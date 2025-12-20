@@ -24,4 +24,4 @@ class OutputAdapter(IOAdapter):
             finally:
                 return
 
-        sys.stdout(serialized_data)
+        sys.stdout.write(serialized_data)
