@@ -26,7 +26,7 @@ class ExcelAdapter(InputAdapter):
             logging.error(error)
             raise
         except FileNotFoundError as error:
-            logging.error("Invalid file path.")
+            logging.error("Invalid file path for excel input.")
             logging.error(error)
             raise
         return input_df

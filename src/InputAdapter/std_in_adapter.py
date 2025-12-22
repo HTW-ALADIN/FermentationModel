@@ -13,7 +13,7 @@ class STDINAdapter(InputAdapter):
         try:
             input_df = pd.DataFrame(json.loads(data))
         except json.JSONDecodeError as error:
-            logging.error("Invalid JSON input.")
+            logging.error("Invalid JSON input from stdi.")
             logging.error(error)
             sys.exit(1)
         return input_df

@@ -34,5 +34,5 @@ if __name__ == "__main__":
     output_adapter.write(serialized_output, file_path)
 
     # TODO: flag for toggling?
-    # multiplot_ferm(result_df)
+    multiplot_ferm(result_df)
     sys.exit(0)

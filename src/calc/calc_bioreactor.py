@@ -15,14 +15,19 @@ MODEL_PATH = "./src/DataModels/model_db.json"
 
 def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
     try:
-        model_id = ferm_param_in_df[InputKeys.model.value][0]
+        model_id = str(int(ferm_param_in_df[InputKeys.model.value][0]))    #model_id is a string! if read from excel model number is a float64
         logging.info(f" Model {model_id} is being used.")
         with open(MODEL_PATH) as f:
             model = json.load(f)
             model_param_in = model[model_id]  # dictionary
 
     except json.JSONDecodeError:
-        logging.error("Invalid JSON input.")
+        logging.error("Invalid JSON input in Model_db.json.")
+        raise 
+    except FileNotFoundError as error:
+        logging.error("Invalid file path for Model_db.json.")
+        logging.error(error)
+        raise
 
     # Nebenberechnung
     [model_param, ferm_param_df] = Nebenrechnungen(model_param_in, ferm_param_in_df)
@@ -36,7 +41,7 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
     for index, row in ferm_param_df.iterrows():
         # result_df hier befüllen
         logging.debug(f" Phase: {row[InputKeys.phase]}")
-
+        #Set the starting conditions for solving the ODEs
         if index == 0:
             c_x_0 = row[InputKeys.c_x0]
             c_S1_0 = row[InputKeys.bolus_c]
@@ -78,9 +83,9 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
             t_start = result.t[-1]
             t_ende = t_start + row[InputKeys.duration]
 
-        if row[InputKeys.duration] != 0:
+        if row[InputKeys.duration] != 0: # only proceed if the duration is not 0
             logging.info(f"Calc Phase: {index} from {t_start} - {t_ende} h")
-            datapoints = row[InputKeys.duration] * data_rate
+            datapoints = int(row[InputKeys.duration] * data_rate) #make sure datapoints is an integer
             t_span = np.linspace(t_start, t_ende, datapoints)
             if datapoints < 50:
                 datapoints = 50  # this is needed in case a Phase is really short so the minimal number of datapoint per phase=50
@@ -88,45 +93,45 @@ def calculate(ferm_param_in_df: pd.DataFrame) -> pd.DataFrame:
                 row.to_dict()
             )  # extract Fermentation parameters for current phase and convert to dictionary as this is faster in solve_ivp
 
-        result = solve_ivp(
-            Bioreaktor_ODE,
-            (t_start, t_ende),
-            y0,
-            args=(model_param, Fpar_d),
-            t_eval=t_span,
-            max_step=0.0005,
-            atol=1e-6,
-            rtol=1e-7,
-        )
-        # solve_IVP Explanations
-        # args are passed as a tupel - a single element in a tupel is single_element_tuple = (5,)
-        # via small atol and rtol practical "non-negative" is achieved
-        # #Results of Solve_ivp stores y values in result.y which is an array of one row per parameter
-        # and n-datapoints in n columns
-        if index == 0:
-            y = result.y.T
-            y_ges = y  # transform array
-            logging.debug(f" dim y_ges: {y_ges.shape}")
-            t_ges = np.atleast_2d(result.t).T
-            logging.debug(f" dim t_ges: {t_ges.shape}")
-            sum_feeding = t_span * row[InputKeys.feed_c]
-            len_t_span = len(t_span)
-            Drehzahl = np.zeros(len_t_span) + row[InputKeys.rpm]
-            Q_Air = np.zeros(len_t_span) + row[InputKeys.q_air]
-            Druck = np.zeros(len_t_span) + row[InputKeys.pressure]
-        else:
-            y = result.y.T  # transform array
-            y_ges = np.vstack((y_ges, y))
-            t = np.atleast_2d(result.t).T
-            t_ges = np.vstack((t_ges, t))
-            already_fed = sum_feeding[-1]
-            t_span_temp = np.subtract(t_span, t_span[0])
-            temp_feed = already_fed + t_span_temp * row[InputKeys.feed_c]
-            sum_feeding = np.hstack((sum_feeding, temp_feed))
-            len_t_span = len(t_span)
-            Drehzahl = np.hstack((Drehzahl, np.zeros(len_t_span) + row[InputKeys.rpm]))
-            Q_Air = np.hstack((Q_Air, np.zeros(len_t_span) + row[InputKeys.q_air]))
-            Druck = np.hstack((Druck, np.zeros(len_t_span) + row[InputKeys.pressure]))
+            result = solve_ivp(
+                Bioreaktor_ODE,
+                (t_start, t_ende),
+                y0,
+                args=(model_param, Fpar_d),
+                t_eval=t_span,
+                max_step=0.0005,
+                atol=1e-6,
+                rtol=1e-7,
+            )
+            # solve_IVP Explanations
+            # args are passed as a tupel - a single element in a tupel is single_element_tuple = (5,)
+            # via small atol and rtol practical "non-negative" is achieved
+            # Results of Solve_ivp stores y values in result.y which is an array of one row per parameter
+            # and n-datapoints in n columns
+            if index == 0:
+                y = result.y.T
+                y_ges = y  # transform array
+                logging.debug(f" dim y_ges: {y_ges.shape}")
+                t_ges = np.atleast_2d(result.t).T
+                logging.debug(f" dim t_ges: {t_ges.shape}")
+                sum_feeding = t_span * row[InputKeys.feed_c]
+                len_t_span = len(t_span)
+                Drehzahl = np.zeros(len_t_span) + row[InputKeys.rpm]
+                Q_Air = np.zeros(len_t_span) + row[InputKeys.q_air]
+                Druck = np.zeros(len_t_span) + row[InputKeys.pressure]
+            else:
+                y = result.y.T  # transform array
+                y_ges = np.vstack((y_ges, y))
+                t = np.atleast_2d(result.t).T
+                t_ges = np.vstack((t_ges, t))
+                already_fed = sum_feeding[-1]
+                t_span_temp = np.subtract(t_span, t_span[0])
+                temp_feed = already_fed + t_span_temp * row[InputKeys.feed_c]
+                sum_feeding = np.hstack((sum_feeding, temp_feed))
+                len_t_span = len(t_span)
+                Drehzahl = np.hstack((Drehzahl, np.zeros(len_t_span) + row[InputKeys.rpm]))
+                Q_Air = np.hstack((Q_Air, np.zeros(len_t_span) + row[InputKeys.q_air]))
+                Druck = np.hstack((Druck, np.zeros(len_t_span) + row[InputKeys.pressure]))
 
     #######################################
     # #Weitere Variablen berechnen
