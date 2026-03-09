@@ -17,7 +17,7 @@ parser.add_argument(
     "-p",
     "--parameters",
     type=str,
-    help="The input parameters for the fermentation model. Can be passed as json or as a path to a json-file. Default is json.",
+    help="The input parameters for the fermentation model. The type in which the input parameters are passed is defined with -i option.",
 )
 parser.add_argument(
     "-i",
