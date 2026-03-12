@@ -45,9 +45,9 @@ def Bioreaktor_ODE(x, y, Mpar, Fpar): #Hier werden die ODEs definiert
     #mu_s = mumax*cs1/(KS1+cs1)*cs2/(KS2+cs2)*c_ox/(KS_O2+c_ox); % Monod Kinetik fuer spezifische Wachstumsrate Varinate "Produkt-Verknüpfung"
     
     #Produktbildungsrate
-    # b = beta*cs1/(KMS1+cs1)*(1-(mu_s/mumax))^200; %Michaelis Menten Kinetik für nicht wachstumssassoziierte Produktbildung
+    # b = beta*cs1/(KMS1+cs1)*(1-(mu_s/mumax))**200; %Michaelis Menten Kinetik für nicht wachstumssassoziierte Produktbildung
     # Alternative Code (same speed)
-    if mu > 1*10^(-3): #wenn mu größer ~0 dann keine nicht wachstumsassoziierte Produktbildung; bei numerischer Integration wird mu nie exakt 0
+    if mu > 1*10**(-3): #wenn mu größer ~0 dann keine nicht wachstumsassoziierte Produktbildung; bei numerischer Integration wird mu nie exakt 0
          beta=0
     else:
          beta = Mpar["beta"]*c_S1/(Mpar["KMS1"]+c_S1)
